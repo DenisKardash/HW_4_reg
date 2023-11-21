@@ -1,6 +1,8 @@
 import { useState, useRef } from 'react';
 import styles from '../app.module.css';
 
+// Constants ----------------------------
+
 const sendFormData = (formData) => {
 	console.log(formData);
 };
@@ -25,28 +27,33 @@ const useStore = () => {
 	};
 };
 
+// -----------------------------------------
+
 export const RegistrationPage = () => {
+	
 	const { getState, updateState, resetState } = useStore();
 	const [inputError, setInputError] = useState(null);
+
+	const { email, password, checkPassword } = getState();
+
+	const passwordRef = useRef('');
+	const confirmPasswordRef = useRef('');
+
+	const emailRef = useRef('');
+	const submitButtonRef = useRef(null);
 
 	const onSubmitButton = (event) => {
 		event.preventDefault();
 		sendFormData(getState());
 	};
 
-	const { email, password, checkPassword } = getState();
-
-	// ------------------------------------
-	const submitButtonRef = useRef(null);
-
 	const checkField = () => {
 		return Object.values(getState()).every((value) => !!value);
 	};
 
-	if (checkField() || inputError === null) {
-		// submitButtonRef.current.focus();
+	if (checkField() && inputError === null) {
+		submitButtonRef.current.focus();
 	}
-	// ------------------------------------
 
 	const onChangeTarget = ({ target }) => {
 		updateState(target.name, target.value);
@@ -57,9 +64,11 @@ export const RegistrationPage = () => {
 			error = `Неверный ${target.name}. Допустимые символы: буквы, цифры, "@", "_", "-"`;
 		}
 
-		// РАБОТАЕТ НЕ КОРРЕКТНО (сравнивает пароли при следующем рендеринге +1 символ)
-		// ПОЭТОМУ ОТКЛЮЧИЛ - submitButtonRef.current.focus();
-		if (password !== checkPassword) {
+		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRef.current.value)) {
+			error = 'поле E-mail не соответствует E-mail адресу ';
+		}
+
+		if (passwordRef.current.value !== confirmPasswordRef.current.value) {
 			error = `пароли не совпадают`;
 		}
 
@@ -83,6 +92,7 @@ export const RegistrationPage = () => {
 						type="email"
 						placeholder="E-mail"
 						value={email}
+						ref={emailRef}
 						onChange={onChangeTarget}
 					/>
 					<input
@@ -91,6 +101,7 @@ export const RegistrationPage = () => {
 						type="password"
 						placeholder="Password"
 						value={password}
+						ref={passwordRef}
 						onChange={onChangeTarget}
 						onBlur={onFieldBlur}
 					/>
@@ -100,6 +111,7 @@ export const RegistrationPage = () => {
 						type="password"
 						placeholder="Confirm Password"
 						value={checkPassword}
+						ref={confirmPasswordRef}
 						onChange={onChangeTarget}
 						onBlur={onFieldBlur}
 					/>
@@ -116,65 +128,3 @@ export const RegistrationPage = () => {
 		</>
 	);
 };
-
-// export const RegistrationPage = () => {
-// 	const [formData, setFormData] = useState({
-// 		email: '',
-// 		password: '',
-// 		checkPassword: '',
-// 	});
-
-// 	const [inputError, setInputError] = useState(null);
-
-// 	const onSubmitButton = (event) => {
-// 		event.preventDefault();
-// 		sendFormData(formData);
-// 	};
-
-// 	const onChangeTarget = ({ target }) => {
-// 		setFormData({ ...formData, [target.name]: target.value });
-
-// 		let error = null;
-
-// 		if (formData.password !== formData.checkPassword) {
-// 			error = `пароли не совпадают`;
-// 		}
-
-// 		if (!/^[\w._@-]*$/.test(target.value)) {
-// 			error = `Неверный ${target.name}. Допустимые символы: буквы, цифры, "@", "_", "-"`;
-// 		}
-
-// 		setInputError(error);
-// 	};
-// 	return (
-// 		<div className={styles.app}>
-// 			<form onSubmit={onSubmitButton} className={styles.inputArea}>
-// 				<input
-// 					required
-// 					name="email"
-// 					type="email"
-// 					value={formData.email}
-// 					placeholder="E-mail"
-// 					onChange={onChangeTarget}
-// 				/>
-// 				<input
-// 					name="password"
-// 					type="text"
-// 					value={formData.password}
-// 					placeholder="Password"
-// 					onChange={onChangeTarget}
-// 				/>
-// 				<input
-// 					name="checkPassword"
-// 					type="text"
-// 					value={formData.checkPassword}
-// 					placeholder="Conform Password"
-// 					onChange={onChangeTarget}
-// 				/>
-// 				<button type="submit">Отправить</button>
-// 				<button type="button">Reset</button>
-// 			</form>
-// 			{inputError && <div className={styles.errorLabel}>{inputError}</div>}
-// 		</div>
-// 	);
-// };
