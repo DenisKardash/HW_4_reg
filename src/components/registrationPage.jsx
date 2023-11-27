@@ -1,52 +1,28 @@
 // Develop
-
 import { useState, useRef } from 'react';
+
+import { sendFormData } from './constatnts';
+import { useStore } from './store';
+
 import styles from '../app.module.css';
 
-// Constants ----------------------------
-
-const sendFormData = (formData) => {
-	console.log(formData);
-};
-
-const initialState = {
-	email: '',
-	password: '',
-	checkPassword: '',
-};
-
-const useStore = () => {
-	const [state, setState] = useState(initialState);
-
-	return {
-		getState: () => state,
-		updateState: (fieldName, newValue) => {
-			setState({ ...state, [fieldName]: newValue });
-		},
-		resetState: () => {
-			setState(initialState);
-		},
-	};
-};
-
-// -----------------------------------------
+import { onFieldBlur, onChangeTarget } from './form-field-validation';
 
 export const RegistrationPage = () => {
 	const { getState, updateState, resetState } = useStore();
-	const [inputError, setInputError] = useState(null);
-
 	const { email, password, checkPassword } = getState();
-
-	const passwordRef = useRef('');
-	const confirmPasswordRef = useRef('');
-
-	const emailRef = useRef('');
-	const submitButtonRef = useRef(null);
 
 	const onSubmitButton = (event) => {
 		event.preventDefault();
 		sendFormData(getState());
 	};
+
+	const [inputError, setInputError] = useState(null);
+
+	const passwordRef = useRef('');
+	const confirmPasswordRef = useRef('');
+	const emailRef = useRef('');
+	const submitButtonRef = useRef(null);
 
 	const checkField = () => {
 		return Object.values(getState()).every((value) => !!value);
@@ -56,14 +32,16 @@ export const RegistrationPage = () => {
 		submitButtonRef.current.focus();
 	}
 
+	// onChangeTarget(emailRef, passwordRef, confirmPasswordRef);
+
 	const onChangeTarget = ({ target }) => {
 		updateState(target.name, target.value);
 
 		let error = null;
 
-		// if (!/^[\w._@-]*$/.test(target.value)) {
-		// 	error = `Неверный ${target.name}. Допустимые символы: буквы, цифры, "@", "_", "-"`;
-		// }
+		if (!/^[\w._@-]*$/.test(target.value)) {
+			error = `Неверный ${target.name}. Допустимые символы: буквы, цифры, "@", "_", "-"`;
+		}
 
 		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRef.current.value)) {
 			error = 'поле E-mail не соответствует E-mail адресу ';
@@ -76,11 +54,9 @@ export const RegistrationPage = () => {
 		setInputError(error);
 	};
 
-	const onFieldBlur = () => {
-		if (password.length < 8) {
-			setInputError(`Пароль не должен быть короче 8 символов`);
-		}
-	};
+	onFieldBlur({ password });
+
+	// ----------------------------------------------------------------
 
 	return (
 		<>
@@ -106,7 +82,7 @@ export const RegistrationPage = () => {
 						onChange={onChangeTarget}
 						onBlur={onFieldBlur}
 					/>
-					{/* <input
+					<input
 						required
 						name="checkPassword"
 						type="password"
@@ -115,7 +91,7 @@ export const RegistrationPage = () => {
 						ref={confirmPasswordRef}
 						onChange={onChangeTarget}
 						onBlur={onFieldBlur}
-					/> */}
+					/>
 					<button ref={submitButtonRef} type="submit" disabled={inputError !== null}>
 						Registration
 					</button>
