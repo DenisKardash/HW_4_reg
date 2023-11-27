@@ -1,3 +1,5 @@
+// Develop
+
 import { useState, useRef } from 'react';
 import styles from '../app.module.css';
 
@@ -30,7 +32,6 @@ const useStore = () => {
 // -----------------------------------------
 
 export const RegistrationPage = () => {
-	
 	const { getState, updateState, resetState } = useStore();
 	const [inputError, setInputError] = useState(null);
 
@@ -60,9 +61,9 @@ export const RegistrationPage = () => {
 
 		let error = null;
 
-		if (!/^[\w._@-]*$/.test(target.value)) {
-			error = `Неверный ${target.name}. Допустимые символы: буквы, цифры, "@", "_", "-"`;
-		}
+		// if (!/^[\w._@-]*$/.test(target.value)) {
+		// 	error = `Неверный ${target.name}. Допустимые символы: буквы, цифры, "@", "_", "-"`;
+		// }
 
 		if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailRef.current.value)) {
 			error = 'поле E-mail не соответствует E-mail адресу ';
@@ -105,7 +106,7 @@ export const RegistrationPage = () => {
 						onChange={onChangeTarget}
 						onBlur={onFieldBlur}
 					/>
-					<input
+					{/* <input
 						required
 						name="checkPassword"
 						type="password"
@@ -114,7 +115,7 @@ export const RegistrationPage = () => {
 						ref={confirmPasswordRef}
 						onChange={onChangeTarget}
 						onBlur={onFieldBlur}
-					/>
+					/> */}
 					<button ref={submitButtonRef} type="submit" disabled={inputError !== null}>
 						Registration
 					</button>
