@@ -32,8 +32,6 @@ export const RegistrationPage = () => {
 		submitButtonRef.current.focus();
 	}
 
-	// onChangeTarget(emailRef, passwordRef, confirmPasswordRef);
-
 	const onChangeTarget = ({ target }) => {
 		updateState(target.name, target.value);
 
@@ -50,11 +48,8 @@ export const RegistrationPage = () => {
 		if (passwordRef.current.value !== confirmPasswordRef.current.value) {
 			error = `пароли не совпадают`;
 		}
-
 		setInputError(error);
 	};
-
-	onFieldBlur({ password });
 
 	// ----------------------------------------------------------------
 
@@ -80,7 +75,7 @@ export const RegistrationPage = () => {
 						value={password}
 						ref={passwordRef}
 						onChange={onChangeTarget}
-						onBlur={onFieldBlur}
+						onBlur={() => onFieldBlur({ password, setInputError })}
 					/>
 					<input
 						required
@@ -90,7 +85,7 @@ export const RegistrationPage = () => {
 						value={checkPassword}
 						ref={confirmPasswordRef}
 						onChange={onChangeTarget}
-						onBlur={onFieldBlur}
+						// onBlur={() => onFieldBlur(checkPassword)}
 					/>
 					<button ref={submitButtonRef} type="submit" disabled={inputError !== null}>
 						Registration

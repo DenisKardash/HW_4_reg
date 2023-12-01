@@ -1,11 +1,14 @@
-let setInputError = null;
-
-// export const onChangeTarget = ({ target }, emailRef, passwordRef, confirmPasswordRef ) => {
-
+// export const onChangeTarget = ({
+// 	target,
+// 	updateState,
+// 	emailRef,
+// 	passwordRef,
+// 	confirmPasswordRef,
+// 	setInputError,
+// }) => {
 // 	updateState(target.name, target.value);
 
 // 	let error = null;
-// 	let setInputError = error;
 
 // 	if (!/^[\w._@-]*$/.test(target.value)) {
 // 		error = `Неверный ${target.name}. Допустимые символы: буквы, цифры, "@", "_", "-"`;
@@ -22,8 +25,8 @@ let setInputError = null;
 // 	setInputError(error);
 // };
 
-export const onFieldBlur = (password) => {
+export const onFieldBlur = ({ password, setInputError }) => {
 	if (password.length < 8) {
-		return setInputError(`Пароль не должен быть короче 8 символов`);
+		setInputError(`Пароль не должен быть короче 8 символов`);
 	}
 };
