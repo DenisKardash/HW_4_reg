@@ -6,7 +6,7 @@ import { useStore } from './store';
 
 import styles from '../app.module.css';
 
-import { onFieldBlur, onChangeTarget } from './form-field-validation';
+import { onFieldBlur } from './form-field-validation';
 
 export const RegistrationPage = () => {
 	const { getState, updateState, resetState } = useStore();
