@@ -1,17 +1,26 @@
 .app {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .inputArea {
-	margin: auto;
+	margin-left: 50px;
+	margin-right: 50px;
 	margin-top: 20px;
-	width: 200px;
+
+	/* width: 400px; */
 	padding: 10px;
 
 	border: solid 1px;
 	border-radius: 5px;
+
+	background-color: rgb(175, 174, 174);
 }
 
+.info {
+	margin: 50px;
+	color: aliceblue;
+	text-shadow: 5px black;
+}
 
 
 .errorLabel {
